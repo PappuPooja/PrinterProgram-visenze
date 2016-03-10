@@ -1,0 +1,85 @@
+package visenze;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
+public class Printer{
+	public static void main(String[] args) throws IOException {
+		BufferedInputStream bis = null;  
+		 BufferedOutputStream bos = null;  
+		  try {  
+			  bis = new BufferedInputStream(new FileInputStream(  
+					     "/home/Desktop/Vinezen/Input"));  
+					   bos = new BufferedOutputStream(new FileOutputStream(  
+					     "/home/Desktop/Vinezen/file"));   
+		int data;
+		int fixed_length=100;
+		   int fixed_height=5;
+		   int length=0,height=0,n=0;
+		 ArrayList<Integer> array= new ArrayList<Integer>();
+		   while ((data = bis.read()) != -1) { 
+			 if(data!=32)	 
+			 array.add(data);
+			 else{ 
+				 if(length<fixed_length)
+				 		{
+					 if(length==0 && n!=0)
+						array.remove(array.get(0));
+					 		for(int i=0;i<array.size();i++){
+					 			bos.write(array.get(i)); 
+					 		}
+					 		length+=array.size();
+				 		}
+				 else if(height==fixed_height){
+					 bos.close();
+					 bos=new BufferedOutputStream(new FileOutputStream(  
+						     "/home/Desktop/Vinezen/file"+(n+1)));
+					 n++;	
+					 height=0;
+					 length=0;
+					 if(length==0)
+							array.remove(array.get(0));
+						 		for(int i=0;i<array.size();i++){
+						 			bos.write(array.get(i)); 
+						 		}
+						 		length+=array.size();
+					
+					
+				 }
+				 
+				 
+				 else{
+					 height++;
+					 bos.write('\n');
+					 array.remove(array.get(0));
+					 for(int i=0;i<array.size();i++){
+				 			bos.write(array.get(i)); 
+				 		}
+					 length=array.size(); 
+				 } 
+				 array.clear();
+				 array.add(32);
+			 
+			 }
+			 
+			 
+		   }
+		  } catch (FileNotFoundException e) {  
+		   e.printStackTrace();  
+		  } finally {  
+		   if (bis != null)  
+		    bis.close();  
+		   if (bos != null)  
+		    bos.close();  
+		  }  
+	}
+	
+	
+}
+
